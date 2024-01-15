@@ -23,3 +23,21 @@ jobs:
       - run: |
           npm ci
           npm run ts-validate
+
+  prettier:
+    name: Check formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'npm'
+
+      - run: |
+          npm ci
+          npm run check-format
