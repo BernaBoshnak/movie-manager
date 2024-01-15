@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext js,ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "ts-validate": "tsc --noEmit",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|ts|tsx)\"",
     "format": "npm run prettier -- --write",
     "check-format": "npm run prettier -- --check",
