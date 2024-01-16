@@ -18,7 +18,8 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@styles": ["src/assets/scss/*"]
+      "@styles/*": ["src/assets/scss/*"],
+      "@custom-types/*": ["src/types/*"],
     },
 
     /* Linting */

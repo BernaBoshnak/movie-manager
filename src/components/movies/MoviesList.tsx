@@ -1,64 +1,45 @@
-import { useState } from 'react'
-import {
-  Button,
-  Form,
-  FormCheck,
-  FormText,
-  ListGroup,
-  ListGroupItem,
-} from 'react-bootstrap'
-import FormCheckLabel from 'react-bootstrap/esm/FormCheckLabel'
+import { Button, Form } from 'react-bootstrap'
+import MovieItem from '@components/movies/MovieItem'
+import { Movies } from '@custom-types/movies'
 
 type MovieListProps = {
-  movies: Set<string>
+  movies: Movies
 }
 
 const MoviesList = ({ movies }: MovieListProps) => {
-  const [selectedMovies, setSelectedMovies] = useState<Set<string>>(new Set())
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  const handleCheckboxChange = (movieTitle: string) => {
-    const updateSelectedMovies = new Set(selectedMovies)
+    const form = e.target as HTMLFormElement
+    const moviesNodes = form['movie']
 
-    if (updateSelectedMovies.has(movieTitle)) {
-      updateSelectedMovies.delete(movieTitle)
-    } else {
-      updateSelectedMovies.add(movieTitle)
+    if (!moviesNodes) {
+      return
     }
 
-    setSelectedMovies(updateSelectedMovies)
+    const movies = [...moviesNodes] as HTMLInputElement[]
+    const checkedMovies = movies.filter((movie) => movie.checked)
+    // eslint-disable-next-line
+    const checkedMovieNames = checkedMovies.map((movie) => movie.value)
   }
 
   return (
-    <Form className="mt-4">
-      <FormText className="d-block fs-3 fw-medium text-center text-light-emphasis text-uppercase">
+    <Form onSubmit={handleSubmit}>
+      <div className="fs-3 fw-medium text-center text-light-emphasis text-uppercase mb-3">
         Movies List
-      </FormText>
+      </div>
       {movies.size > 0 ? (
         <>
-          <ListGroup as="ul" variant="flush" className="mb-3">
+          <ul className="list-unstyled mb-3">
             {Array.from(movies).map((movie, index) => (
-              <ListGroupItem as="li" key={index}>
-                <FormCheck
-                  type="checkbox"
-                  className="btn-check"
-                  id={`btn-check-${index}`}
-                  checked={selectedMovies.has(movie)}
-                  onChange={() => handleCheckboxChange(movie)}
-                />
-                <FormCheckLabel
-                  htmlFor={`btn-check-${index}`}
-                  className={`btn ${
-                    selectedMovies.has(movie)
-                      ? 'btn-outline-primary'
-                      : 'btn-primary'
-                  }`}
-                >
-                  {movie}
-                </FormCheckLabel>
-              </ListGroupItem>
+              <MovieItem key={index} movie={movie} />
             ))}
-          </ListGroup>
-          <Button className="d-block px-4 m-auto fs-5">Search</Button>
+          </ul>
+          <div className="text-center">
+            <Button type="submit" className="px-4 fs-5">
+              Search
+            </Button>
+          </div>
         </>
       ) : (
         <p className="mt-3 text-primary">No movies available</p>
