@@ -27,8 +27,9 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["cypress", "@testing-library/cypress", "node"]
   },
-  "include": ["src/**/*.*"],
+  "include": ["src/**/*.*", "cypress/**/*.*", "tests/**/*.*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

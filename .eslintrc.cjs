@@ -17,6 +17,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'no-console': 'error',
+    '@typescript-eslint/no-namespace': 'off',
   },
   settings: {
     react: {
