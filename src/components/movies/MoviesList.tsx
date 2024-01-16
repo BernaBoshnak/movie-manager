@@ -10,17 +10,16 @@ const MoviesList = ({ movies }: MovieListProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const form = e.target as HTMLFormElement
-    const moviesNodes = form['movie']
+    // const form = e.target as HTMLFormElement
+    // const moviesNodes = form['movie']
 
-    if (!moviesNodes) {
-      return
-    }
+    // if (!moviesNodes) {
+    //   return
+    // }
 
-    const movies = [...moviesNodes] as HTMLInputElement[]
-    const checkedMovies = movies.filter((movie) => movie.checked)
-    // eslint-disable-next-line
-    const checkedMovieNames = checkedMovies.map((movie) => movie.value)
+    // const movies = [...moviesNodes] as HTMLInputElement[]
+    // const checkedMovies = movies.filter((movie) => movie.checked)
+    // const checkedMovieNames = checkedMovies.map((movie) => movie.value)
   }
 
   return (
