@@ -10,8 +10,17 @@
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/utilities';
 
+// Components
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import "bootstrap/scss/containers";
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/buttons';
+
 // Custom
 @import 'common';
+@import 'custom';
 
 // Helpers
 @import 'bootstrap/scss/helpers';
