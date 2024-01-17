@@ -14,6 +14,7 @@
     "check-format": "npm run prettier -- --check",
     "cy:open-unit": "cypress open --component --browser chrome",
     "cy:run-unit": "cypress run --component",
+    "test": "npm run cy:run-unit",
     "validate": "npm-run-all --parallel lint ts-validate check-format"
   },
   "dependencies": {
