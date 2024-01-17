@@ -22,8 +22,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, 'src/components'),
-      '@styles': path.resolve(__dirname, 'src/assets/scss'),
       '@custom-types': path.resolve(__dirname, 'src/types'),
+      '@styles': path.resolve(__dirname, 'src/assets/scss'),
     },
   },
 })

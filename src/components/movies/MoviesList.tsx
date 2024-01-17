@@ -23,10 +23,10 @@ const MoviesList = ({ movies }: MovieListProps) => {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <div className="fs-3 fw-medium text-center text-light-emphasis text-uppercase mb-3">
+    <Form onSubmit={handleSubmit} data-testid="movies-list-form">
+      <h2 className="text-center text-light-emphasis text-uppercase mb-3">
         Movies List
-      </div>
+      </h2>
       {movies.size > 0 ? (
         <>
           <ul className="list-unstyled mb-3">
