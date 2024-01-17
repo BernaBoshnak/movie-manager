@@ -29,8 +29,8 @@ const MovieItem = ({ movie }: MovieItemProps) => {
       <FormCheck.Label
         htmlFor={id}
         className={classNames('btn', {
-          'btn-outline-dark': !checked,
-          'btn-dark': checked,
+          'btn-outline-secondary': !checked,
+          'btn-secondary': checked,
         })}
       >
         {movie}
