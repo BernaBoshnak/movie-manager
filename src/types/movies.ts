@@ -1,2 +1,2 @@
-export type Movie = string
-export type Movies = Set<Movie>
+export type MovieName = string
+export type MoviesNames = Set<MovieName>

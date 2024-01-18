@@ -20,6 +20,7 @@ export default defineConfig({
             '@components': path.resolve(__dirname, 'src/components'),
             '@custom-types': path.resolve(__dirname, 'src/types'),
             '@styles': path.resolve(__dirname, 'src/assets/scss'),
+            '@utils': path.resolve(__dirname, 'src/utils'),
           },
           extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.scss'],
         },

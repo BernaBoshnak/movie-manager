@@ -19,7 +19,8 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@custom-types/*": ["src/types/*"],
-      "@styles/*": ["src/assets/scss/*"]
+      "@styles/*": ["src/assets/scss/*"],
+      "@utils/*": ["src/utils/*"]
     },
 
     /* Linting */

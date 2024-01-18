@@ -1,11 +1,7 @@
 import { useState, useRef } from 'react'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-} from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
+import { faUpload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type FileUploadProps = {
   setMovies: React.Dispatch<React.SetStateAction<Set<string>>>
@@ -40,14 +36,14 @@ const FileUpload = ({ setMovies }: FileUploadProps) => {
 
   return (
     <Form onSubmit={handleSubmit} data-testid="upload-form">
-      <FormGroup className="mb-3">
-        <FormLabel
+      <Form.Group className="mb-3 d-block text-center">
+        <Form.Label
           htmlFor="form-file"
-          className="d-block bg-primary-subtle border border-primary-subtle rounded-start rounded-end mb-4 fs-3 text-center text-primary cursor-pointer"
+          className="lh-1 rounded-4 p-3 border border-primary-subtle fs-2 text-primary cursor-pointer"
         >
-          Upload <strong>*.txt</strong> file
-        </FormLabel>
-        <FormControl
+          <FontAwesomeIcon icon={faUpload} />
+        </Form.Label>
+        <Form.Control
           type="file"
           name="file"
           ref={fileInputRef}
@@ -56,7 +52,11 @@ const FileUpload = ({ setMovies }: FileUploadProps) => {
           onChange={handleFileChange}
           className="d-none"
         />
-      </FormGroup>
+        <Form.Text muted className="d-block text-center">
+          Please upload a text file <strong>*.txt</strong> containing movie
+          names, each in a new line for processing.
+        </Form.Text>
+      </Form.Group>
       <div className="text-center">
         <Button
           type="submit"

@@ -1,13 +1,14 @@
 import classNames from 'classnames'
 import { useId, useState } from 'react'
 import { FormCheck } from 'react-bootstrap'
-import { Movie } from '@custom-types/movies'
+import { MovieName } from '@custom-types/movies'
 
 type MovieItemProps = {
-  movie: Movie
+  movie: MovieName
+  disabled: boolean
 }
 
-const MovieItem = ({ movie }: MovieItemProps) => {
+const MovieItem = ({ movie, disabled }: MovieItemProps) => {
   const [checked, setChecked] = useState(true)
   const id = useId()
 
@@ -22,6 +23,7 @@ const MovieItem = ({ movie }: MovieItemProps) => {
         name="movie"
         id={id}
         value={movie}
+        disabled={disabled}
         className="btn-check"
         checked={checked}
         onChange={handleChange}
