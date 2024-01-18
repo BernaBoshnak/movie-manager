@@ -21,8 +21,8 @@ describe('File upload and movies list', () => {
   })
 
   describe('<MovieList />', () => {
-    it('should show page heading', () => {
-      cy.findByRole('heading', { name: /movies list/i })
+    it('renders MoviesList when movies size is greater than 0', () => {
+      cy.findByRole('heading', { name: /movies list/i }).should('not.exist')
     })
   })
 })
