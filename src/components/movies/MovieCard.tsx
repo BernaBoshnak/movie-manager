@@ -12,8 +12,12 @@ const MovieCard = ({ movie, onDelete }: MovieCardProps) => (
   <Card>
     <Card.Img
       variant="top"
-      src={`https://image.tmdb.org/t/p/w400/${movie.poster_path}`}
-      alt={movie.title}
+      src={
+        movie.poster_path
+          ? `https://image.tmdb.org/t/p/w400/${movie.poster_path}`
+          : '/img/fallback-lg.jpg'
+      }
+      alt={`"${movie.title}" movie title`}
     />
     <Card.Body>
       <Card.Title>{movie.title}</Card.Title>
