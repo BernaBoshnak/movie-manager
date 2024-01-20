@@ -1,6 +1,8 @@
-import { Row, Col, Button } from 'react-bootstrap'
+import { useState } from 'react'
+import { Row, Col, Button, Spinner } from 'react-bootstrap'
 import MovieCard from '@components/movies/MovieCard'
 import SearchMovies from '@components/search/SearchMovies'
+import { saveMovies } from '@controllers/movie-controller'
 import { Movie } from '@custom-types/api/tmdb/search/movie'
 
 export type MoviesCardsProps = {
@@ -9,8 +11,10 @@ export type MoviesCardsProps = {
 }
 
 const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
-  const handleSave = () => {
-    // TODO
+  const [saving, setSaving] = useState(false)
+  const handleSave = async () => {
+    setSaving(true)
+    saveMovies().finally(() => setSaving(false))
   }
 
   const handleDelete = (movieId: Movie['id']) => {
@@ -28,8 +32,22 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
               variant="primary"
               className="px-4 fs-5"
               onClick={handleSave}
+              disabled={saving}
             >
-              Save
+              {saving ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    className="me-1"
+                  />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>Save</span>
+              )}
             </Button>
           </div>
           <SearchMovies setMoviesData={setMoviesData} />

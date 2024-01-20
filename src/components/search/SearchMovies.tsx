@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Dropdown, DropdownMenu, Form } from 'react-bootstrap'
 import { MoviesCardsProps } from '@components/movies/MoviesCards'
 import SearchMovieItem from '@components/search/SearchMovieItem'
-import { Movie, MovieResponse } from '@custom-types/api/tmdb/search/movie'
-import { getJson } from '@utils/fetch'
+import { getMovies } from '@controllers/movie-controller'
+import { Movie } from '@custom-types/api/tmdb/search/movie'
 
 const SearchMovies = ({
   setMoviesData,
@@ -36,33 +36,23 @@ const SearchMovies = ({
       return
     }
 
-    const api = import.meta.env.VITE_REACT_APP_TMDB_API_ENDPOINT
-    const accessToken = import.meta.env.VITE_REACT_APP_TMDB_ACCESS_TOKEN
-
     const urlParams = new URLSearchParams({
       query: searchValue,
       include_adult: 'false',
       language: 'en-US',
       page: '1',
     })
-    const url = `${api}/search/movie?${urlParams.toString()}`
     const controller = new AbortController()
     controllersRef.current.add(controller)
 
     try {
-      const data = await getJson<MovieResponse>(url, {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        signal: controller.signal,
-      })
+      const { results: movies } = await getMovies(urlParams, controller)
 
-      if (data.results.length < 0) {
+      if (movies.length < 0) {
         return
       }
 
-      setSearchResults(new Set(data.results))
+      setSearchResults(new Set(movies))
     } catch (err) {
       // TODO
     } finally {

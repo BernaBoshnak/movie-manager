@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import MovieItem from '@components/movies/MovieItem'
 import MoviesCards from '@components/movies/MoviesCards'
-import { Movie, MovieResponse } from '@custom-types/api/tmdb/search/movie'
+import { getMovies } from '@controllers/movie-controller'
+import { Movie } from '@custom-types/api/tmdb/search/movie'
 import { MoviesNames } from '@custom-types/movies'
-import { getJson } from '@utils/fetch'
 
 type MovieListProps = {
   movies: MoviesNames
@@ -38,9 +38,6 @@ const MoviesList = ({ movies }: MovieListProps) => {
     const checkedMovies = movies.filter((movie) => movie.checked)
     const checkedMovieNames = checkedMovies.map((movie) => movie.value)
 
-    const api = import.meta.env.VITE_REACT_APP_TMDB_API_ENDPOINT
-    const accessToken = import.meta.env.VITE_REACT_APP_TMDB_ACCESS_TOKEN
-
     checkedMovieNames.forEach(async (movieTitle) => {
       const urlParams = new URLSearchParams({
         query: movieTitle,
@@ -48,24 +45,16 @@ const MoviesList = ({ movies }: MovieListProps) => {
         language: 'en-US',
         page: '1',
       })
-      const url = `${api}/search/movie?${urlParams.toString()}`
       const controller = new AbortController()
       controllersRef.current.add(controller)
 
       try {
-        const data = await getJson<MovieResponse>(url, {
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          signal: controller.signal,
-        })
-
-        if (data.results.length < 0) {
+        const { results: movies } = await getMovies(urlParams, controller)
+        if (movies.length < 0) {
           return
         }
 
-        const [movie] = data.results
+        const [movie] = movies
         const hasMovie = [...moviesData].some(({ id }) => id === movie.id)
 
         if (hasMovie) {

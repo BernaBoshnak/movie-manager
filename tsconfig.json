@@ -18,6 +18,7 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["src/components/*"],
+      "@controllers/*": ["src/controllers/*"],
       "@custom-types/*": ["src/types/*"],
       "@styles/*": ["src/assets/scss/*"],
       "@utils/*": ["src/utils/*"]
