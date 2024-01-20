@@ -104,7 +104,7 @@ const MoviesList = ({ movies }: MovieListProps) => {
           </div>
         )}
       </Form>
-      <MoviesCards moviesData={moviesData} />
+      <MoviesCards moviesData={moviesData} setMoviesData={setMoviesData} />
     </>
   )
 }

@@ -39,7 +39,7 @@ const FileUpload = ({ setMovies }: FileUploadProps) => {
       <Form.Group className="mb-3 d-block text-center">
         <Form.Label
           htmlFor="form-file"
-          className="lh-1 rounded-4 p-3 border border-primary-subtle fs-2 text-primary cursor-pointer"
+          className="lh-1 rounded-4 p-5 border border-primary-subtle fs-1 text-primary cursor-pointer"
         >
           <FontAwesomeIcon icon={faUpload} />
         </Form.Label>

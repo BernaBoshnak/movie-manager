@@ -3,7 +3,7 @@ import { Movie } from '@custom-types/api/tmdb/search/movie'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-type MovieCardProps = {
+export type MovieCardProps = {
   movie: Movie
 }
 
