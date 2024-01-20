@@ -13,6 +13,12 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
     // TODO
   }
 
+  const handleDelete = (movieId: Movie['id']) => {
+    setMoviesData(
+      (prev) => new Set([...prev].filter(({ id }) => id !== movieId)),
+    )
+  }
+
   return (
     <>
       {moviesData.size > 0 && (
@@ -32,7 +38,7 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
       <Row xs={1} md={2} lg={3} xl={4} className="g-3">
         {[...moviesData].map((movie, index) => (
           <Col key={index} className="mb-1">
-            <MovieCard movie={movie} />
+            <MovieCard movie={movie} onDelete={() => handleDelete(movie.id)} />
           </Col>
         ))}
       </Row>
