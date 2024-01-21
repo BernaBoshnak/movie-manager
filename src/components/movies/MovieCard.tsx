@@ -9,7 +9,7 @@ export type MovieCardProps = {
 }
 
 const MovieCard = ({ movie, onDelete }: MovieCardProps) => (
-  <Card>
+  <Card className="cursor-pointer">
     <Card.Img
       variant="top"
       src={
@@ -25,7 +25,9 @@ const MovieCard = ({ movie, onDelete }: MovieCardProps) => (
       <div className="text-end">
         <Button variant="danger" size="sm" onClick={onDelete}>
           <FontAwesomeIcon icon={faTrashCan} />
-          <span className="visually-hidden">Delete "{movie.title}"</span>
+          <span className="visually-hidden">
+            Delete &quot;{movie.title}&rdquo;
+          </span>
         </Button>
       </div>
     </Card.Body>

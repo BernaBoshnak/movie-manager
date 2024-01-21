@@ -10,8 +10,9 @@ const SearchMovies = ({
 }: {
   setMoviesData: MoviesCardsProps['setMoviesData']
 }) => {
-  const searchInputRef = useRef<HTMLInputElement | null>(null)
   const [searchResults, setSearchResults] = useState<Set<Movie>>(new Set())
+  const [isSearchInputFocused, setIsSearchInputFocused] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
   const controllersRef = useRef<Set<AbortController>>(new Set())
 
   useEffect(() => {
@@ -30,14 +31,15 @@ const SearchMovies = ({
       return
     }
 
-    const searchValue = searchInput.value.trim()
-    if (!searchValue.length) {
+    const value = searchInput.value.trim()
+
+    if (!value.length) {
       setSearchResults(new Set())
       return
     }
 
     const urlParams = new URLSearchParams({
-      query: searchValue,
+      query: value,
       include_adult: 'false',
       language: 'en-US',
       page: '1',
@@ -80,12 +82,6 @@ const SearchMovies = ({
     }
   }
 
-  const handleToggle = (isOpen: boolean) => {
-    if (!isOpen) {
-      setSearchResults(new Set())
-    }
-  }
-
   return (
     <div className="mb-3">
       <Form.Text className="d-block text-center mb-2 fs-5" muted>
@@ -96,18 +92,19 @@ const SearchMovies = ({
         type="search"
         placeholder="Type here..."
         onChange={handleChange}
+        onFocus={() => setIsSearchInputFocused(true)}
+        // the delay is required in order for the `onSelect` callback
+        // to be fired before the dropdown is unmounted
+        onBlur={() => setTimeout(() => setIsSearchInputFocused(false), 150)}
       />
-      <Dropdown
-        onToggle={handleToggle}
-        autoClose="outside"
-        show={searchResults.size > 0}
-        onSelect={handleSelect}
-      >
-        <DropdownMenu className="w-100">
-          {[...searchResults].map((movie) => (
-            <SearchMovieItem key={movie.id} movie={movie} />
-          ))}
-        </DropdownMenu>
+      <Dropdown show onSelect={handleSelect}>
+        {searchResults.size > 0 && isSearchInputFocused && (
+          <DropdownMenu className="w-100">
+            {[...searchResults].map((movie) => (
+              <SearchMovieItem key={movie.id} movie={movie} />
+            ))}
+          </DropdownMenu>
+        )}
       </Dropdown>
     </div>
   )

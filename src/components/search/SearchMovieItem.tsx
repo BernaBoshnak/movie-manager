@@ -2,7 +2,7 @@ import { Dropdown } from 'react-bootstrap'
 import { MovieCardProps } from '@components/movies/MovieCard'
 
 const SearchMovieItem = ({ movie }: { movie: MovieCardProps['movie'] }) => (
-  <Dropdown.Item as="li" eventKey={movie.id.toString()}>
+  <Dropdown.Item as="li" role="button" eventKey={movie.id.toString()}>
     <img
       src={
         movie.poster_path
