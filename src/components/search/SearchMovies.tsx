@@ -7,9 +7,7 @@ import { Movie } from '@custom-types/api/tmdb/search/movie'
 
 const SearchMovies = ({
   setMoviesData,
-}: {
-  setMoviesData: MoviesCardsProps['setMoviesData']
-}) => {
+}: Pick<MoviesCardsProps, 'setMoviesData'>) => {
   const [searchResults, setSearchResults] = useState<Set<Movie>>(new Set())
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false)
   const searchInputRef = useRef<HTMLInputElement | null>(null)

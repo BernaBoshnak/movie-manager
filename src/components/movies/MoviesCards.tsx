@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Row, Col, Button, Spinner } from 'react-bootstrap'
+import Filter from '@components/filter/Filter'
 import MovieCard from '@components/movies/MovieCard'
 import SearchMovies from '@components/search/SearchMovies'
 import { saveMovies } from '@controllers/movie-controller'
@@ -51,6 +52,7 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
             </Button>
           </div>
           <SearchMovies setMoviesData={setMoviesData} />
+          <Filter moviesData={moviesData} />
         </>
       )}
       <Row xs={1} md={2} lg={3} xl={4} className="g-3">

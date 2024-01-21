@@ -1,7 +1,7 @@
 import { Dropdown } from 'react-bootstrap'
 import { MovieCardProps } from '@components/movies/MovieCard'
 
-const SearchMovieItem = ({ movie }: { movie: MovieCardProps['movie'] }) => (
+const SearchMovieItem = ({ movie }: Pick<MovieCardProps, 'movie'>) => (
   <Dropdown.Item as="li" role="button" eventKey={movie.id.toString()}>
     <img
       src={
