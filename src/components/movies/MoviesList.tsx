@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap'
 import MovieItem from '@components/movies/MovieItem'
 import MoviesCards from '@components/movies/MoviesCards'
 import { getMovies } from '@controllers/movie-controller'
-import { Movie } from '@custom-types/api/tmdb/search/movie'
+import { Movie, MovieId } from '@custom-types/api/tmdb/search/movie'
 import { MoviesNames } from '@custom-types/movies'
 
 type MovieListProps = {
@@ -11,7 +11,7 @@ type MovieListProps = {
 }
 
 const MoviesList = ({ movies }: MovieListProps) => {
-  const [moviesData, setMoviesData] = useState<Set<Movie>>(new Set())
+  const [moviesData, setMoviesData] = useState<Record<MovieId, Movie>>({})
   const controllersRef = useRef<Set<AbortController>>(new Set())
 
   useEffect(() => {
@@ -55,13 +55,15 @@ const MoviesList = ({ movies }: MovieListProps) => {
         }
 
         const [movie] = movies
-        const hasMovie = [...moviesData].some(({ id }) => id === movie.id)
+        const hasMovie = Object.values(moviesData).some(
+          ({ id }) => id === movie.id,
+        )
 
         if (hasMovie) {
           return
         }
 
-        setMoviesData((prev) => new Set([...prev, movie]))
+        setMoviesData((prev) => ({ ...prev, [movie.id]: movie }))
       } catch (err) {
         // TODO
       } finally {
@@ -81,11 +83,11 @@ const MoviesList = ({ movies }: MovieListProps) => {
             <MovieItem
               key={index}
               movie={movie}
-              disabled={moviesData.size > 0}
+              disabled={Object.keys(moviesData).length > 0}
             />
           ))}
         </ul>
-        {!moviesData.size && (
+        {Object.keys(moviesData).length === 0 && (
           <div className="text-center">
             <Button type="submit" className="px-4 fs-5">
               Search

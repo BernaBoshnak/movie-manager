@@ -13,13 +13,20 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     strict: ['error', 'never'],
-    "react-hooks/exhaustive-deps": "error",
+    'react-hooks/exhaustive-deps': 'error',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
     'no-console': 'error',
     '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+      },
+    ],
   },
   settings: {
     react: {

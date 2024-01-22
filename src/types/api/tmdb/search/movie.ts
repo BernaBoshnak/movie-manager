@@ -1,6 +1,6 @@
 import { Brand } from '@custom-types/utils'
 
-type MovieId = Brand<number, 'MovieId'>
+export type MovieId = Brand<number, 'MovieId'>
 
 export type Movie = {
   adult: boolean

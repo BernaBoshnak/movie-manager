@@ -4,29 +4,38 @@ import Filter from '@components/filter/Filter'
 import MovieCard from '@components/movies/MovieCard'
 import SearchMovies from '@components/search/SearchMovies'
 import { saveMovies } from '@controllers/movie-controller'
-import { Movie } from '@custom-types/api/tmdb/search/movie'
+import { Movie, MovieId } from '@custom-types/api/tmdb/search/movie'
 
 export type MoviesCardsProps = {
-  moviesData: Set<Movie>
-  setMoviesData: React.Dispatch<React.SetStateAction<Set<Movie>>>
+  moviesData: Record<MovieId, Movie>
+  setMoviesData: React.Dispatch<React.SetStateAction<Record<MovieId, Movie>>>
 }
 
 const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
+  const [filteredMoviesIds, setFilteredMoviesIds] = useState<Set<MovieId>>(
+    new Set(),
+  )
   const [saving, setSaving] = useState(false)
   const handleSave = async () => {
     setSaving(true)
     saveMovies().finally(() => setSaving(false))
   }
 
-  const handleDelete = (movieId: Movie['id']) => {
-    setMoviesData(
-      (prev) => new Set([...prev].filter(({ id }) => id !== movieId)),
-    )
+  const handleDelete = (movieId: MovieId) => {
+    setFilteredMoviesIds((prev) => {
+      const newSet = new Set([...prev])
+      newSet.delete(movieId)
+      return newSet
+    })
+    setMoviesData((prev) => {
+      const { [movieId]: _deleteMovieId, ...restMovies } = prev
+      return restMovies
+    })
   }
 
   return (
     <>
-      {moviesData.size > 0 && (
+      {Object.keys(moviesData).length > 0 && (
         <>
           <div className="text-center mb-3">
             <Button
@@ -52,13 +61,19 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
             </Button>
           </div>
           <SearchMovies setMoviesData={setMoviesData} />
-          <Filter moviesData={moviesData} />
+          <Filter
+            moviesData={moviesData}
+            setFilteredMoviesIds={setFilteredMoviesIds}
+          />
         </>
       )}
       <Row xs={1} md={2} lg={3} xl={4} className="g-3">
-        {[...moviesData].map((movie, index) => (
-          <Col key={index} className="mb-1">
-            <MovieCard movie={movie} onDelete={() => handleDelete(movie.id)} />
+        {[...filteredMoviesIds].map((movieId) => (
+          <Col key={movieId} className="mb-1">
+            <MovieCard
+              movie={moviesData[movieId]}
+              onDelete={() => handleDelete(movieId)}
+            />
           </Col>
         ))}
       </Row>

@@ -3,7 +3,9 @@ import ListItem from '@components/filter/ListItem'
 import { MoviesCardsProps } from '@components/movies/MoviesCards'
 
 const Language = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
-  const languagesArr = [...moviesData].map((movie) => movie.original_language)
+  const languagesArr = Object.values(moviesData).map(
+    (movie) => movie.original_language,
+  )
   const languages = new Set(languagesArr)
 
   return (
@@ -11,7 +13,12 @@ const Language = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
       <Card.Header>Language</Card.Header>
       <ListGroup variant="flush">
         {[...languages].map((language) => (
-          <ListItem key={language} value={language} />
+          <ListItem
+            key={language}
+            name="language"
+            value={language}
+            defaultChecked
+          />
         ))}
       </ListGroup>
     </Card>

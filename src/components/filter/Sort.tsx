@@ -1,28 +1,28 @@
 import { useState } from 'react'
 import { Card, ListGroup } from 'react-bootstrap'
 import ListItem from '@components/filter/ListItem'
-import { MoviesCardsProps } from '@components/movies/MoviesCards'
 
-const Sort = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
-  // eslint-disable-next-line no-console
-  console.log('moviesData', moviesData)
-  const [selectedSort, setSelectedSort] = useState('asc')
+const Sort = () => {
+  const orders = ['asc', 'desc'] as const
+  type Order = (typeof orders)[number]
+  const [order, setOrder] = useState<Order>('asc')
 
-  const handleSortChange = (sortOrder: string) => {
-    setSelectedSort(sortOrder)
+  const handleSortChange = (sortOrder: Order) => {
+    setOrder(sortOrder)
   }
 
   return (
     <Card className="mb-3">
-      <Card.Header>Genre</Card.Header>
+      <Card.Header>Sort (by popularity)</Card.Header>
       <ListGroup variant="flush">
-        {['asc', 'desc'].map((order) => (
+        {orders.map((o) => (
           <ListItem
-            key={order}
+            key={o}
             type="radio"
-            value={order}
-            onClick={() => handleSortChange(order)}
-            active={selectedSort === order}
+            name="order"
+            value={o}
+            onChange={() => handleSortChange(o)}
+            checked={order === o}
           />
         ))}
       </ListGroup>

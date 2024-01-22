@@ -3,7 +3,9 @@ import ListItem from '@components/filter/ListItem'
 import { MoviesCardsProps } from '@components/movies/MoviesCards'
 
 const Genre = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
-  const genresArr = [...moviesData].map((movie) => movie.genre_ids).flat()
+  const genresArr = Object.values(moviesData)
+    .map((movie) => movie.genre_ids)
+    .flat()
   const genres = new Set(genresArr)
 
   return (
@@ -11,7 +13,12 @@ const Genre = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
       <Card.Header>Genre</Card.Header>
       <ListGroup variant="flush">
         {[...genres].map((genre) => (
-          <ListItem key={genre} value={genre.toString()} />
+          <ListItem
+            key={genre}
+            name="genre"
+            value={genre.toString()}
+            defaultChecked
+          />
         ))}
       </ListGroup>
     </Card>

@@ -70,7 +70,7 @@ const SearchMovies = ({
     )
 
     if (selectedMovie) {
-      setMoviesData((prev) => new Set([...prev, selectedMovie]))
+      setMoviesData((prev) => ({ ...prev, [selectedMovie.id]: selectedMovie }))
       const searchInput = searchInputRef.current
 
       if (searchInput) {
