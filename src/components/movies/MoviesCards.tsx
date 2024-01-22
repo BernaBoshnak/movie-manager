@@ -72,6 +72,7 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
           <Col key={movieId} className="mb-1">
             <MovieCard
               movie={moviesData[movieId]}
+              setMoviesData={setMoviesData}
               onDelete={() => handleDelete(movieId)}
             />
           </Col>
