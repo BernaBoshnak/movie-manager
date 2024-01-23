@@ -20,6 +20,7 @@ const Sort = () => {
             key={o}
             type="radio"
             name="order"
+            label={o}
             value={o}
             onChange={() => handleSortChange(o)}
             checked={order === o}

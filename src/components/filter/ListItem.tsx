@@ -6,7 +6,7 @@ const ListItem = (props: FormCheckProps) => {
 
   return (
     <ListGroup.Item>
-      <Form.Check id={id} label={props.value} {...props} />
+      <Form.Check id={id} {...props} />
     </ListGroup.Item>
   )
 }

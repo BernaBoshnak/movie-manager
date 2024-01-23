@@ -16,6 +16,7 @@ const Language = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
           <ListItem
             key={language}
             name="language"
+            label={language}
             value={language}
             defaultChecked
           />
