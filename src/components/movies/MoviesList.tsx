@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { useErrorContext } from '@components/context/ErrorContext'
 import MovieItem from '@components/movies/MovieItem'
 import MoviesCards from '@components/movies/MoviesCards'
 import { getMovies } from '@controllers/movie-controller'
@@ -13,6 +14,7 @@ type MovieListProps = {
 const MoviesList = ({ movies }: MovieListProps) => {
   const [moviesData, setMoviesData] = useState<Record<MovieId, Movie>>({})
   const controllersRef = useRef<Set<AbortController>>(new Set())
+  const { setError } = useErrorContext()
 
   useEffect(() => {
     const controllers = controllersRef.current
@@ -65,7 +67,8 @@ const MoviesList = ({ movies }: MovieListProps) => {
 
         setMoviesData((prev) => ({ ...prev, [movie.id]: movie }))
       } catch (err) {
-        // TODO
+        const error = err as Error
+        setError(error.message)
       } finally {
         controllersRef.current.delete(controller)
       }

@@ -18,6 +18,7 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["src/components/*"],
+      "@context/*": ["src/context/*"],
       "@controllers/*": ["src/controllers/*"],
       "@custom-types/*": ["src/types/*"],
       "@styles/*": ["src/assets/scss/*"],

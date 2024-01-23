@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Dropdown, DropdownMenu, Form } from 'react-bootstrap'
+import { useErrorContext } from '@components/context/ErrorContext'
 import { MoviesCardsProps } from '@components/movies/MoviesCards'
 import SearchMovieItem from '@components/search/SearchMovieItem'
 import { getMovies } from '@controllers/movie-controller'
@@ -12,6 +13,7 @@ const SearchMovies = ({
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const controllersRef = useRef<Set<AbortController>>(new Set())
+  const { setError } = useErrorContext()
 
   useEffect(() => {
     const controllers = controllersRef.current
@@ -54,7 +56,8 @@ const SearchMovies = ({
 
       setSearchResults(new Set(movies))
     } catch (err) {
-      // TODO
+      const error = err as Error
+      setError(error.message)
     } finally {
       controllersRef.current.delete(controller)
     }

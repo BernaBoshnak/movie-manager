@@ -27,6 +27,7 @@ module.exports = {
         argsIgnorePattern: '^_',
       },
     ],
+    'react-refresh/only-export-components': 'off',
   },
   settings: {
     react: {
