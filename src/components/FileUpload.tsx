@@ -37,21 +37,18 @@ const FileUpload = ({ setMovies }: FileUploadProps) => {
   return (
     <Form onSubmit={handleSubmit} data-testid="upload-form">
       <Form.Group className="mb-3 d-block text-center">
-        <Form.Label
-          htmlFor="form-file"
-          className="lh-1 rounded-4 p-5 border border-primary-subtle fs-1 text-primary cursor-pointer"
-        >
+        <Form.Label className="lh-1 rounded-4 p-5 border border-primary-subtle fs-1 text-primary cursor-pointer">
           <FontAwesomeIcon icon={faUpload} />
+          <Form.Control
+            type="file"
+            name="file"
+            ref={fileInputRef}
+            accept=".txt"
+            onChange={handleFileChange}
+            className="d-none"
+          />
+          <span className="visually-hidden">Upload file</span>
         </Form.Label>
-        <Form.Control
-          type="file"
-          name="file"
-          ref={fileInputRef}
-          id="form-file"
-          accept=".txt"
-          onChange={handleFileChange}
-          className="d-none"
-        />
         <Form.Text muted className="d-block text-center">
           Please upload a text file <strong>*.txt</strong> containing movie
           names, each in a new line for processing.

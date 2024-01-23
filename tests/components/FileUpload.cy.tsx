@@ -1,28 +1,31 @@
 import { mount } from 'cypress/react18'
 import App from '@components/App'
+import ErrorContextProvider from '@components/context/ErrorContext'
 
-describe('File upload and movies list', () => {
+describe('<FileUpload />', () => {
   beforeEach(() => {
-    mount(<App />)
+    mount(
+      <ErrorContextProvider>
+        <App />
+      </ErrorContextProvider>,
+    )
     cy.findByTestId('upload-form').as('uploadForm')
+  })
+
+  it('should have the correct text', () => {
     cy.get('@uploadForm').within(() => {
-      cy.findByRole('button', { name: /submit/i }).should('be.disabled')
+      cy.findByText(
+        /please upload a text file containing movie names, each in a new line for processing\./i,
+      )
     })
   })
 
-  describe('<FileUpload />', () => {
-    it('should upload a valid *.txt file', () => {})
-
-    it('should show "submit" button', () => {
-      cy.get('@uploadForm').within(() => {
-        cy.findByRole('button', { name: /submit/i })
-      })
+  it('should attach a valid *.txt file', () => {
+    cy.findByRole('button', { name: /submit/i }).should('be.disabled')
+    cy.get('@uploadForm').within(() => {
+      cy.fixture('movies.txt').as('file')
+      cy.findByLabelText(/upload file/i).selectFile('@file', { force: true })
     })
-  })
-
-  describe('<MovieList />', () => {
-    it('renders MoviesList when movies size is greater than 0', () => {
-      cy.findByRole('heading', { name: /movies list/i }).should('not.exist')
-    })
+    cy.findByRole('button', { name: /submit/i }).should('be.enabled')
   })
 })
