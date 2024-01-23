@@ -77,7 +77,7 @@ const MoviesList = ({ movies }: MovieListProps) => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit} data-testid="movies-list-form">
+      <Form onSubmit={handleSubmit}>
         <h2 className="text-center text-light-emphasis text-uppercase mb-3">
           Movies List
         </h2>

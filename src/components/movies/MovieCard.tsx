@@ -37,7 +37,7 @@ const MovieCard = ({ movie, setMoviesData, onDelete }: MovieCardProps) => {
         variant="top"
         src={
           movie.poster_path
-            ? `https://image.tmdb.org/t/p/w400/${movie.poster_path}`
+            ? `https://image.tmdb.org/t/p/w400${movie.poster_path}`
             : '/img/fallback-lg.jpg'
         }
         alt={`"${movie.title}" movie title`}

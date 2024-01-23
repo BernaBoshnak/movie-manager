@@ -6,7 +6,7 @@ const SearchMovieItem = ({ movie }: Pick<MovieCardProps, 'movie'>) => (
     <img
       src={
         movie.poster_path
-          ? `https://image.tmdb.org/t/p/w200/${movie.poster_path}`
+          ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
           : '/img/fallback.jpg'
       }
       alt={`"${movie.title}" movie title`}

@@ -1,0 +1,52 @@
+{
+  "results": [
+    {
+      "adult": false,
+      "backdrop_path": "/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg",
+      "genre_ids": [1, 2],
+      "id": 1,
+      "original_language": "en",
+      "original_title": "Lorem ipsum #1",
+      "overview": "Lorem ipsum dolor sit amet 1.",
+      "popularity": 142.932,
+      "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+      "release_date": "1972-03-14",
+      "title": "Lorem ipsum #1",
+      "video": false,
+      "vote_average": 8.707,
+      "vote_count": 19335
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/zNnjHLDtV8Ti3aworltaeaLMov4.jpg",
+      "genre_ids": [2],
+      "id": 2,
+      "original_language": "de",
+      "original_title": "Lorem ipsum #2",
+      "overview": "Lorem ipsum dolor sit amet 2.",
+      "popularity": 80.801,
+      "poster_path": "/lm3pQ2QoQ16pextRsmnUbG2onES.jpg",
+      "release_date": "1990-12-25",
+      "title": "Lorem ipsum #2",
+      "video": false,
+      "vote_average": 7.425,
+      "vote_count": 5797
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/tYjyk4Ij7CwVOn2ovcXdRYffR9k.jpg",
+      "genre_ids": [3],
+      "id": 3,
+      "original_language": "jp",
+      "original_title": "Lorem ipsum #3",
+      "overview": "Lorem ipsum dolor sit amet 3.",
+      "popularity": 17.353,
+      "poster_path": "/xvT9RyO9UdNSc1NRhXnhTujlQWK.jpg",
+      "release_date": "1992-10-17",
+      "title": "Lorem ipsum #3",
+      "video": true,
+      "vote_average": 8.919,
+      "vote_count": 149
+    }
+  ]
+}

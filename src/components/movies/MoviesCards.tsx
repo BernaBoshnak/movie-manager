@@ -67,7 +67,14 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
           />
         </>
       )}
-      <Row xs={1} md={2} lg={3} xl={4} className="g-3">
+      <Row
+        xs={1}
+        md={2}
+        lg={3}
+        xl={4}
+        className="g-3"
+        data-testid="movies-cards"
+      >
         {[...filteredMoviesIds].map((movieId) => (
           <Col key={movieId} className="mb-1">
             <MovieCard
