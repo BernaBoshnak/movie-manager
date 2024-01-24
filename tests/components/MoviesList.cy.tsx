@@ -37,7 +37,6 @@ describe('<MovieList />', () => {
       },
     )
 
-    // TODO
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -198,6 +197,46 @@ describe('<MovieList />', () => {
     )
   })
 
+  it('all boxes must be checked on the initial rendering', () => {
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        movies.forEach((movie) => {
+          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+            body: { results: [movie] },
+            statusCode: 200,
+          })
+        })
+
+        cy.intercept('GET', '**/genre/movie/list**', {
+          fixture: '/api/genres.json',
+          statusCode: 200,
+        }).as('getGenres')
+
+        cy.findByRole('button', { name: /search/i }).click()
+        cy.wait('@getGenres')
+
+        cy.findByTestId('language-card').within(() => {
+          cy.findByText(/language/i)
+          cy.findAllByRole('checkbox').each(($checkbox) => {
+            cy.wrap($checkbox).should('be.checked')
+          })
+        })
+
+        cy.findByTestId('genre-card').within(() => {
+          cy.findByText(/genre/i)
+          cy.findAllByRole('checkbox').each(($checkbox) => {
+            cy.wrap($checkbox).should('be.checked')
+          })
+        })
+
+        cy.findByTestId('order-card').within(() => {
+          cy.findByText('Sort (by popularity)')
+          cy.findByRole('radio', { name: /asc/i }).should('be.checked')
+        })
+      },
+    )
+  })
+
   it('should sort movies by popularity', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
@@ -302,7 +341,7 @@ describe('<MovieList />', () => {
           cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
             body: { results: [movie] },
             statusCode: 200,
-          }).as('getMovies')
+          })
         })
       },
     )

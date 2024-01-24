@@ -12,7 +12,7 @@ const Sort = () => {
   }
 
   return (
-    <Card className="mb-3">
+    <Card data-testid="order-card" className="mb-3">
       <Card.Header>Sort (by popularity)</Card.Header>
       <ListGroup variant="flush">
         {orders.map((o) => (

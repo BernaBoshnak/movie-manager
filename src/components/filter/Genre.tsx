@@ -51,7 +51,7 @@ const Genre = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
   }, [setError])
 
   return (
-    <Card className="mb-3">
+    <Card data-testid="genre-card" className="mb-3">
       <Card.Header>Genre</Card.Header>
       <ListGroup variant="flush">
         {[...genresIds].map((genreId) => (

@@ -9,7 +9,7 @@ const Language = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
   const languages = new Set(languagesArr)
 
   return (
-    <Card className="mb-3">
+    <Card data-testid="language-card" className="mb-3">
       <Card.Header>Language</Card.Header>
       <ListGroup variant="flush">
         {[...languages].map((language) => (
