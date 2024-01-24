@@ -118,7 +118,34 @@ describe('<MovieList />', () => {
     )
   })
 
-  it.skip('deletes movie card', () => {})
+  it('deletes movie card', () => {
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        const [movie] = movies
+
+        cy.intercept('GET', '**/genre/movie/list**', {
+          fixture: '/api/genres.json',
+          statusCode: 200,
+        }).as('getGenres')
+
+        cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+          body: { results: [movie] },
+          statusCode: 200,
+        }).as(`getMovie${movie.id}`)
+
+        cy.findByRole('button', { name: /search/i }).click()
+
+        cy.findByTestId('movie-card').within(() => {
+          cy.findByTestId('card-title').as('title')
+          cy.get('@title').should('exist')
+          cy.findByRole('button', { name: /delete/i }).as('deleteBtn')
+          cy.get('@deleteBtn').click()
+          cy.get('@title').should('not.exist')
+        })
+      },
+    )
+  })
+
   it.skip('search for a movie through an input using dropdown', () => {})
   it.skip('should filter movies by language', () => {})
   it.skip('should filter movies by genre', () => {})
