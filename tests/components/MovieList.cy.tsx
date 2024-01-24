@@ -200,7 +200,35 @@ describe('<MovieList />', () => {
 
   it('should sort movies by popularity', () => {})
 
-  it('should filter movies by language', () => {})
+  it('should filter movies by language', () => {
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        movies.forEach((movie) => {
+          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+            body: { results: [movie] },
+            statusCode: 200,
+          })
+        })
+
+        cy.intercept('GET', '**/genre/movie/list**', {
+          fixture: '/api/genres.json',
+          statusCode: 200,
+        }).as('getGenres')
+
+        cy.findByRole('button', { name: /search/i }).click()
+        cy.wait('@getGenres')
+
+        cy.findByRole('checkbox', { name: /en/i }).should('be.checked')
+        cy.findAllByTestId('movies-cards').within(() => {
+          cy.findByText('Lorem ipsum #1')
+        })
+        cy.findByRole('checkbox', { name: /en/i }).click()
+        cy.findAllByTestId('movies-cards').within(() => {
+          cy.findByText('Lorem ipsum #1').should('not.exist')
+        })
+      },
+    )
+  })
 
   it('should filter movies by genre', () => {})
 
