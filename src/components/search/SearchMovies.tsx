@@ -100,7 +100,11 @@ const SearchMovies = ({
       />
       <Dropdown show onSelect={handleSelect}>
         {searchResults.size > 0 && isSearchInputFocused && (
-          <DropdownMenu className="w-100">
+          <DropdownMenu
+            data-testid="movies-dropdown-menu"
+            as="ul"
+            className="w-100"
+          >
             {[...searchResults].map((movie) => (
               <SearchMovieItem key={movie.id} movie={movie} />
             ))}

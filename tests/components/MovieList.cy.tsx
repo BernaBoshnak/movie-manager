@@ -55,6 +55,7 @@ describe('<MovieList />', () => {
 
     cy.findByRole('button', { name: /search/i }).as('searchBtn')
     cy.get('@searchBtn').click()
+    cy.wait('@getGenres')
     cy.get('@searchBtn').should('not.exist')
     cy.findByText(/search for your favourite movies here/i)
 
@@ -74,19 +75,23 @@ describe('<MovieList />', () => {
   it('edits the movie card title and description', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
-        const [movie] = movies
+        movies.forEach((movie) => {
+          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+            body: { results: [movie] },
+            statusCode: 200,
+          }).as(`getMovies${movie.id}`)
+        })
 
         cy.intercept('GET', '**/genre/movie/list**', {
           fixture: '/api/genres.json',
           statusCode: 200,
         }).as('getGenres')
 
-        cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-          body: { results: [movie] },
-          statusCode: 200,
-        }).as(`getMovie${movie.id}`)
-
+        // Uncheck the first and second movie
+        cy.findByLabelText(/movie 1/i).click({ force: true })
+        cy.findByLabelText(/movie 2/i).click({ force: true })
         cy.findByRole('button', { name: /search/i }).click()
+        cy.wait('@getGenres')
 
         cy.findByTestId('movie-card').within(() => {
           cy.findByTestId('card-title').as('title')
@@ -112,7 +117,7 @@ describe('<MovieList />', () => {
         cy.findByRole('button', { name: /save/i }).click()
         // Verify that the state of movies has changed
         cy.get('@saveMovies').should('be.calledWith', [
-          { ...movie, title: 'ABC', overview: 'DEF' },
+          { ...movies[2], title: 'ABC', overview: 'DEF' },
         ])
       },
     )
@@ -121,32 +126,79 @@ describe('<MovieList />', () => {
   it('deletes movie card', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
-        const [movie] = movies
+        movies.forEach((movie) => {
+          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+            body: { results: [movie] },
+            statusCode: 200,
+          }).as(`getMovies${movie.id}`)
+        })
+      },
+    )
+    cy.intercept('GET', '**/genre/movie/list**', {
+      fixture: '/api/genres.json',
+      statusCode: 200,
+    }).as('getGenres')
 
-        cy.intercept('GET', '**/genre/movie/list**', {
-          fixture: '/api/genres.json',
+    // Uncheck the second and third movie
+    cy.findByLabelText(/movie 2/i).click({ force: true })
+    cy.findByLabelText(/movie 3/i).click({ force: true })
+    cy.findByRole('button', { name: /search/i }).click()
+    cy.wait('@getGenres')
+
+    cy.findByTestId('movie-card').within(() => {
+      cy.findByTestId('card-title').as('title')
+      cy.get('@title')
+      cy.findByRole('button', { name: /delete/i }).as('deleteBtn')
+      cy.get('@deleteBtn').click()
+      cy.get('@title').should('not.exist')
+    })
+  })
+
+  it('search for a movie through an input using dropdown', () => {
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        movies.forEach((movie) => {
+          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+            body: { results: [movie] },
+            statusCode: 200,
+          }).as(`getMovies${movie.id}`)
+        })
+      },
+    )
+    cy.intercept('GET', '**/genre/movie/list**', {
+      fixture: '/api/genres.json',
+      statusCode: 200,
+    }).as('getGenres')
+
+    // Uncheck the first movie
+    cy.findByLabelText(/movie 1/i).click({ force: true })
+    cy.findByRole('button', { name: /search/i }).as('searchBtn')
+    cy.get('@searchBtn').click()
+    cy.wait('@getGenres')
+
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        cy.findByTestId('movies-cards').within(() => {
+          cy.findByText(movies[0].title).should('not.exist')
+        })
+        cy.intercept('GET', '**/search/movie**', {
+          body: { results: movies },
           statusCode: 200,
-        }).as('getGenres')
-
-        cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-          body: { results: [movie] },
-          statusCode: 200,
-        }).as(`getMovie${movie.id}`)
-
-        cy.findByRole('button', { name: /search/i }).click()
-
-        cy.findByTestId('movie-card').within(() => {
-          cy.findByTestId('card-title').as('title')
-          cy.get('@title').should('exist')
-          cy.findByRole('button', { name: /delete/i }).as('deleteBtn')
-          cy.get('@deleteBtn').click()
-          cy.get('@title').should('not.exist')
+          delay: 100,
+        }).as('getMovies')
+        cy.findByTestId('movies-dropdown-menu').should('not.exist')
+        cy.findByRole('searchbox').type('M')
+        cy.wait('@getMovies')
+        cy.findByTestId('movies-dropdown-menu').within(() => {
+          cy.findByText(movies[0].title).click()
+        })
+        cy.findByTestId('movies-cards').within(() => {
+          cy.findByText(movies[0].title)
         })
       },
     )
   })
 
-  it.skip('search for a movie through an input using dropdown', () => {})
   it.skip('should filter movies by language', () => {})
   it.skip('should filter movies by genre', () => {})
   it.skip('should sort movies by popularity', () => {})
