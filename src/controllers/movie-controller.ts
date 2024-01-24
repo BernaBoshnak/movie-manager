@@ -1,9 +1,9 @@
-import { MovieResponse } from '@custom-types/api/tmdb/search/movie'
+import { Movie, MovieResponse } from '@custom-types/api/tmdb/search/movie'
 import { getJson } from '@utils/fetch'
 
-export const saveMovies = () => {
+export const saveMovies = (movies: Movie[]) => {
   return new Promise((resolve) => {
-    setTimeout(resolve, 1000)
+    setTimeout(() => resolve(movies), 1000)
   })
 }
 

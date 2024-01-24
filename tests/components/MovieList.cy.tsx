@@ -1,6 +1,7 @@
 import { mount } from 'cypress/react18'
 import App from '@components/App'
 import ErrorContextProvider from '@components/context/ErrorContext'
+import * as movieController from '@controllers/movie-controller'
 import { MovieResponse } from '@custom-types/api/tmdb/search/movie'
 
 describe('<MovieList />', () => {
@@ -70,7 +71,53 @@ describe('<MovieList />', () => {
     )
   })
 
-  it.skip('edits the movie card title and description', () => {})
+  it('edits the movie card title and description', () => {
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        const [movie] = movies
+
+        cy.intercept('GET', '**/genre/movie/list**', {
+          fixture: '/api/genres.json',
+          statusCode: 200,
+        }).as('getGenres')
+
+        cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+          body: { results: [movie] },
+          statusCode: 200,
+        }).as(`getMovie${movie.id}`)
+
+        cy.findByRole('button', { name: /search/i }).click()
+
+        cy.findByTestId('movie-card').within(() => {
+          cy.findByTestId('card-title').as('title')
+          // The title and description are not editable
+          cy.findByTestId('card-description').as('description')
+          cy.get('@title').should('have.attr', 'contenteditable', 'false')
+          cy.get('@description').should('have.attr', 'contenteditable', 'false')
+          cy.findByRole('button', { name: /edit/i }).as('editBtn')
+          cy.get('@editBtn').click()
+          // The title and description are now editable
+          cy.get('@title').should('have.attr', 'contenteditable', 'true')
+          cy.get('@description').should('have.attr', 'contenteditable', 'true')
+          cy.get('@title').clear()
+          cy.get('@title').type('ABC')
+          cy.get('@description').clear()
+          cy.get('@description').type('DEF')
+          cy.get('@editBtn').click()
+          // The title and description are no longer editable
+          cy.get('@title').should('have.attr', 'contenteditable', 'false')
+          cy.get('@description').should('have.attr', 'contenteditable', 'false')
+        })
+        cy.spy(movieController, 'saveMovies').as('saveMovies')
+        cy.findByRole('button', { name: /save/i }).click()
+        // Verify that the state of movies has changed
+        cy.get('@saveMovies').should('be.calledWith', [
+          { ...movie, title: 'ABC', overview: 'DEF' },
+        ])
+      },
+    )
+  })
+
   it.skip('deletes movie card', () => {})
   it.skip('search for a movie through an input using dropdown', () => {})
   it.skip('should filter movies by language', () => {})

@@ -32,7 +32,7 @@ const MovieCard = ({ movie, setMoviesData, onDelete }: MovieCardProps) => {
   }
 
   return (
-    <Card>
+    <Card data-testid="movie-card">
       <Card.Img
         variant="top"
         src={
@@ -44,6 +44,7 @@ const MovieCard = ({ movie, setMoviesData, onDelete }: MovieCardProps) => {
       />
       <Card.Body>
         <Card.Title
+          data-testid="card-title"
           className={classNames('d-block', {
             'border border-warning bg-warning-subtle': isEditing,
           })}
@@ -54,6 +55,7 @@ const MovieCard = ({ movie, setMoviesData, onDelete }: MovieCardProps) => {
           {movie.title}
         </Card.Title>
         <Card.Text
+          data-testid="card-description"
           className={classNames('d-block', {
             'border border-warning bg-warning-subtle': isEditing,
           })}

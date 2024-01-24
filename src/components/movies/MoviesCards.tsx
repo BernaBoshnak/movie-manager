@@ -18,7 +18,7 @@ const MoviesCards = ({ moviesData, setMoviesData }: MoviesCardsProps) => {
   const [saving, setSaving] = useState(false)
   const handleSave = async () => {
     setSaving(true)
-    saveMovies().finally(() => setSaving(false))
+    saveMovies(Object.values(moviesData)).finally(() => setSaving(false))
   }
 
   const handleDelete = (movieId: MovieId) => {
