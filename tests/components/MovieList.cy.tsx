@@ -44,7 +44,7 @@ describe('<MovieList />', () => {
           cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
             body: { results: [movie] },
             statusCode: 200,
-          }).as(`getMovies${movie.id}`)
+          })
         })
       },
     )
@@ -79,7 +79,7 @@ describe('<MovieList />', () => {
           cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
             body: { results: [movie] },
             statusCode: 200,
-          }).as(`getMovies${movie.id}`)
+          })
         })
 
         cy.intercept('GET', '**/genre/movie/list**', {
@@ -130,7 +130,7 @@ describe('<MovieList />', () => {
           cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
             body: { results: [movie] },
             statusCode: 200,
-          }).as(`getMovies${movie.id}`)
+          })
         })
       },
     )
@@ -172,8 +172,7 @@ describe('<MovieList />', () => {
 
     // Uncheck the first movie
     cy.findByLabelText(/movie 1/i).click({ force: true })
-    cy.findByRole('button', { name: /search/i }).as('searchBtn')
-    cy.get('@searchBtn').click()
+    cy.findByRole('button', { name: /search/i }).click()
     cy.wait('@getGenres')
 
     cy.fixture('/api/movies.json').then(
@@ -199,8 +198,41 @@ describe('<MovieList />', () => {
     )
   })
 
-  it.skip('should filter movies by language', () => {})
-  it.skip('should filter movies by genre', () => {})
-  it.skip('should sort movies by popularity', () => {})
-  it.skip('should display an alert message on error', () => {})
+  it('should sort movies by popularity', () => {})
+
+  it('should filter movies by language', () => {})
+
+  it('should filter movies by genre', () => {})
+
+  it('should display an alert message on error', () => {
+    cy.fixture('/api/movies.json').then(
+      ({ results: movies }: MovieResponse) => {
+        movies.forEach((movie) => {
+          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+            body: { results: [movie] },
+            statusCode: 200,
+          }).as('getMovies')
+        })
+      },
+    )
+
+    const errorMessage = 'Fetching genres failed!'
+    cy.intercept('GET', '**/genre/movie/list**', {
+      statusCode: 404,
+      body: { status_message: errorMessage },
+    }).as('getGenres')
+
+    cy.findByRole('alert').should('not.exist')
+    cy.findByRole('button', { name: /search/i }).click()
+    cy.wait('@getGenres')
+
+    cy.findByRole('alert')
+      .should('exist')
+      .within(() => {
+        cy.findByText(/error/i)
+        cy.findByTestId('error-message').contains(errorMessage)
+      })
+    cy.findByRole('button', { name: /close alert/i }).click()
+    cy.findByRole('alert').should('not.exist')
+  })
 })

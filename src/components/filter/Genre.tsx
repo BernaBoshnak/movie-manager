@@ -4,6 +4,7 @@ import { useErrorContext } from '@components/context/ErrorContext'
 import ListItem from '@components/filter/ListItem'
 import { MoviesCardsProps } from '@components/movies/MoviesCards'
 import { getGenres } from '@controllers/genre-controller'
+import { ApiError } from '@custom-types/api/tmdb/error'
 import { Genre as TGenre, GenreId } from '@custom-types/api/tmdb/genre'
 
 const Genre = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
@@ -41,9 +42,8 @@ const Genre = ({ moviesData }: Pick<MoviesCardsProps, 'moviesData'>) => {
 
         setGenres(genresObj)
       })
-      .catch((err) => {
-        const error = err as Error
-        setError(error.message)
+      .catch((err: ApiError) => {
+        setError(err.status_message)
       })
       .finally(() => {
         controllersRef.current.delete(controller)

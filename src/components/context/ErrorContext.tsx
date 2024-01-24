@@ -30,7 +30,7 @@ const ErrorContextProvider: React.FC<{ children?: React.ReactNode }> = ({
           dismissible
         >
           <Alert.Heading>Error</Alert.Heading>
-          <div>{error}</div>
+          <div data-testid="error-message">{error}</div>
         </Alert>
       )}
       {children}

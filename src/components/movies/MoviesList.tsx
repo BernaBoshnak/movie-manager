@@ -4,6 +4,7 @@ import { useErrorContext } from '@components/context/ErrorContext'
 import MovieItem from '@components/movies/MovieItem'
 import MoviesCards from '@components/movies/MoviesCards'
 import { getMovies } from '@controllers/movie-controller'
+import { ApiError } from '@custom-types/api/tmdb/error'
 import { Movie, MovieId } from '@custom-types/api/tmdb/search/movie'
 import { MoviesNames } from '@custom-types/movies'
 
@@ -67,8 +68,8 @@ const MoviesList = ({ movies }: MovieListProps) => {
 
         setMoviesData((prev) => ({ ...prev, [movie.id]: movie }))
       } catch (err) {
-        const error = err as Error
-        setError(error.message)
+        const error = err as ApiError
+        setError(error.status_message)
       } finally {
         controllersRef.current.delete(controller)
       }

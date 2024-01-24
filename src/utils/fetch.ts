@@ -22,8 +22,8 @@ const fetchJson = <TRet>(
         if (res.ok) {
           resolve(await res.json())
         } else {
-          const { error } = await res.json()
-          reject(error)
+          const response = await res.json()
+          reject(response)
         }
       })
       .catch((error) => {

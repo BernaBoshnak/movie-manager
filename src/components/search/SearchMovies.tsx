@@ -4,6 +4,7 @@ import { useErrorContext } from '@components/context/ErrorContext'
 import { MoviesCardsProps } from '@components/movies/MoviesCards'
 import SearchMovieItem from '@components/search/SearchMovieItem'
 import { getMovies } from '@controllers/movie-controller'
+import { ApiError } from '@custom-types/api/tmdb/error'
 import { Movie } from '@custom-types/api/tmdb/search/movie'
 
 const SearchMovies = ({
@@ -56,8 +57,8 @@ const SearchMovies = ({
 
       setSearchResults(new Set(movies))
     } catch (err) {
-      const error = err as Error
-      setError(error.message)
+      const error = err as ApiError
+      setError(error.status_message)
     } finally {
       controllersRef.current.delete(controller)
     }
