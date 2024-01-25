@@ -4,13 +4,16 @@ import * as movieController from '@controllers/movie-controller'
 import { Movie, MovieResponse } from '@custom-types/api/tmdb/search/movie'
 
 describe('<MovieList />', () => {
-  beforeEach(() => {
-    mount(<App />)
+  const uploadFile = (movieFile: `${string}.txt` = 'movies.txt') => {
     cy.findByTestId('upload-form').within(() => {
-      cy.fixture('movies.txt').as('file')
+      cy.fixture(movieFile).as('file')
       cy.findByLabelText(/upload file/i).selectFile('@file', { force: true })
     })
     cy.findByRole('button', { name: /submit/i }).click()
+  }
+
+  beforeEach(() => {
+    mount(<App />)
   })
 
   const genresIntercept = (
@@ -29,14 +32,51 @@ describe('<MovieList />', () => {
     })
   }
 
-  it('should upload a valid *.txt file and render the movies names', () => {
+  it('should show heading', () => {
+    uploadFile()
     cy.findByRole('heading', { name: /movies list/i })
-    cy.findAllByLabelText(/movie \d+/i)
-      .should('be.checked')
-      .and('have.length', 3)
+  })
+
+  describe('valid *.txt file', () => {
+    afterEach(() => {
+      cy.fixture('/api/movies.json').then(
+        ({ results: movies }: MovieResponse) => {
+          movies.forEach((movie) => {
+            movieIntercept(movie)
+          })
+        },
+      )
+
+      cy.findByRole('button', { name: /search/i }).as('searchBtn')
+      cy.get('@searchBtn').click()
+      cy.get('@searchBtn').should('not.exist')
+      cy.findByRole('button', { name: /save/i })
+    })
+
+    it('should render with well formatted files', () => {
+      uploadFile()
+      cy.findAllByLabelText(/^movie \d+$/i)
+        .should('be.checked')
+        .and('have.length', 3)
+    })
+
+    it('should render with file containing a single movie', () => {
+      uploadFile('single-movie.txt')
+      cy.findAllByLabelText(/^movie \d+$/i)
+        .should('be.checked')
+        .and('have.length', 1)
+    })
+
+    it('should render with names containing white space', () => {
+      uploadFile('movies-with-whitespace.txt')
+      cy.findAllByLabelText(/^movie \d+$/i)
+        .should('be.checked')
+        .and('have.length', 3)
+    })
   })
 
   it('should load uploaded movies data and list cards', () => {
+    uploadFile()
     // Verify that no movies are displayed
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
@@ -77,6 +117,7 @@ describe('<MovieList />', () => {
   })
 
   it('edits the movie card title and description', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -122,6 +163,7 @@ describe('<MovieList />', () => {
   })
 
   it('deletes movie card', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -147,6 +189,7 @@ describe('<MovieList />', () => {
   })
 
   it('search for a movie through an input using dropdown', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -187,7 +230,8 @@ describe('<MovieList />', () => {
     )
   })
 
-  it('all boxes must be checked on the initial rendering', () => {
+  it('should have all checkboxes checked on initial rendering', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -222,6 +266,7 @@ describe('<MovieList />', () => {
   })
 
   it('should sort movies by popularity', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -253,6 +298,7 @@ describe('<MovieList />', () => {
   })
 
   it('should filter movies by language', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -277,6 +323,7 @@ describe('<MovieList />', () => {
   })
 
   it('should filter movies by genre', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
@@ -301,6 +348,7 @@ describe('<MovieList />', () => {
   })
 
   it('should display an alert message on error', () => {
+    uploadFile()
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {

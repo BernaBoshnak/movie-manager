@@ -23,7 +23,11 @@ const FileUpload = ({ setMovies }: FileUploadProps) => {
     if (selectedFile) {
       const reader = new FileReader()
       reader.onload = (e) => {
-        const fileContent = e.target?.result as string
+        const fileContent = (e.target?.result as string).trim()
+        if (!fileContent) {
+          return
+        }
+
         const movieTitlesArr = fileContent
           .split('\n')
           .map((title) => title.trim())

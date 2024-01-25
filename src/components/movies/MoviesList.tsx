@@ -7,6 +7,7 @@ import { getMovies } from '@controllers/movie-controller'
 import { ApiError } from '@custom-types/api/tmdb/error'
 import { Movie, MovieId } from '@custom-types/api/tmdb/search/movie'
 import { MoviesNames } from '@custom-types/movies'
+import { isArrayLike } from '@utils/common'
 
 type MovieListProps = {
   movies: MoviesNames
@@ -31,13 +32,10 @@ const MoviesList = ({ movies }: MovieListProps) => {
     e.preventDefault()
 
     const form = e.target as HTMLFormElement
-    const moviesNodes = form['movie']
-
-    if (!moviesNodes) {
-      return
-    }
-
-    const movies = [...moviesNodes] as HTMLInputElement[]
+    const moviesNodes = form['movie'] as RadioNodeList
+    const movies = (
+      isArrayLike(moviesNodes) ? [...moviesNodes] : [moviesNodes]
+    ) as HTMLInputElement[]
     const checkedMovies = movies.filter((movie) => movie.checked)
     const checkedMovieNames = checkedMovies.map((movie) => movie.value)
 
