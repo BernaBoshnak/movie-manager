@@ -45,7 +45,7 @@ const MovieCard = ({ movie, setMoviesData, onDelete }: MovieCardProps) => {
       <Card.Body>
         <Card.Title
           data-testid="card-title"
-          className={classNames('d-block', {
+          className={classNames('d-block', 'text-truncate', {
             'border border-warning bg-warning-subtle': isEditing,
           })}
           contentEditable={isEditing}
@@ -56,14 +56,15 @@ const MovieCard = ({ movie, setMoviesData, onDelete }: MovieCardProps) => {
         </Card.Title>
         <Card.Text
           data-testid="card-description"
-          className={classNames('d-block', {
+          as="div"
+          className={classNames('d-block', 'card-description', {
             'border border-warning bg-warning-subtle': isEditing,
           })}
           contentEditable={isEditing}
           onBlur={(e) => handleBlur(e, 'overview')}
           suppressContentEditableWarning
         >
-          {movie.overview}
+          <p className="card-description-inner">{movie.overview}</p>
         </Card.Text>
         <div className="text-end">
           <Button

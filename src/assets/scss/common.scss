@@ -7,3 +7,15 @@ body,
 .hover-effect:hover {
   background-color: var(--bs-gray-200);
 }
+
+.card-description {
+  height: 12.5rem;
+  overflow: hidden;
+}
+
+.card-description-inner {
+  width: 31.25rem;
+  padding-right: 15.625rem;
+  overflow: auto;
+  height: 100%;
+}
