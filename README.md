@@ -2,6 +2,8 @@
 
 This is a Movie Manager app built using `React` and `TypeScript` with `Vite`.
 
+## Demo [link](https://movie-manager-7fabc.web.app/)
+
 ## Description
 
 This project introduces a user-friendly web form designed for the effortless upload of a `.txt` file containing a list of movie titles. The uploaded file is processed, and the movie titles are displayed on the page with corresponding checkboxes, allowing users to filter out unwanted records.
