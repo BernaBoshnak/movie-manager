@@ -1,14 +1,9 @@
 import { mount } from 'cypress/react18'
 import App from '@components/App'
-import ErrorContextProvider from '@components/context/ErrorContext'
 
 describe('<FileUpload />', () => {
   beforeEach(() => {
-    mount(
-      <ErrorContextProvider>
-        <App />
-      </ErrorContextProvider>,
-    )
+    mount(<App />)
     cy.findByTestId('upload-form').as('uploadForm')
   })
 

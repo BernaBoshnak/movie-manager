@@ -1,22 +1,33 @@
 import { mount } from 'cypress/react18'
 import App from '@components/App'
-import ErrorContextProvider from '@components/context/ErrorContext'
 import * as movieController from '@controllers/movie-controller'
-import { MovieResponse } from '@custom-types/api/tmdb/search/movie'
+import { Movie, MovieResponse } from '@custom-types/api/tmdb/search/movie'
 
 describe('<MovieList />', () => {
   beforeEach(() => {
-    mount(
-      <ErrorContextProvider>
-        <App />
-      </ErrorContextProvider>,
-    )
+    mount(<App />)
     cy.findByTestId('upload-form').within(() => {
       cy.fixture('movies.txt').as('file')
       cy.findByLabelText(/upload file/i).selectFile('@file', { force: true })
     })
     cy.findByRole('button', { name: /submit/i }).click()
   })
+
+  const genresIntercept = (
+    response: Parameters<typeof cy.intercept>[2] = {
+      fixture: '/api/genres.json',
+      statusCode: 200,
+    },
+  ) => {
+    cy.intercept('GET', '**/genre/movie/list**', response).as('getGenres')
+  }
+
+  const movieIntercept = (movie: Movie) => {
+    cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
+      body: { results: [movie] },
+      statusCode: 200,
+    })
+  }
 
   it('should upload a valid *.txt file and render the movies names', () => {
     cy.findByRole('heading', { name: /movies list/i })
@@ -40,17 +51,11 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
       },
     )
-    cy.intercept('GET', '**/genre/movie/list**', {
-      fixture: '/api/genres.json',
-      statusCode: 200,
-    }).as('getGenres')
+    genresIntercept()
 
     cy.findByRole('button', { name: /search/i }).as('searchBtn')
     cy.get('@searchBtn').click()
@@ -75,16 +80,10 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
 
-        cy.intercept('GET', '**/genre/movie/list**', {
-          fixture: '/api/genres.json',
-          statusCode: 200,
-        }).as('getGenres')
+        genresIntercept()
 
         // Uncheck the first and second movie
         cy.findByLabelText(/movie 1/i).click({ force: true })
@@ -126,17 +125,11 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
       },
     )
-    cy.intercept('GET', '**/genre/movie/list**', {
-      fixture: '/api/genres.json',
-      statusCode: 200,
-    }).as('getGenres')
+    genresIntercept()
 
     // Uncheck the second and third movie
     cy.findByLabelText(/movie 2/i).click({ force: true })
@@ -164,10 +157,7 @@ describe('<MovieList />', () => {
         })
       },
     )
-    cy.intercept('GET', '**/genre/movie/list**', {
-      fixture: '/api/genres.json',
-      statusCode: 200,
-    }).as('getGenres')
+    genresIntercept()
 
     // Uncheck the first movie
     cy.findByLabelText(/movie 1/i).click({ force: true })
@@ -201,16 +191,10 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
 
-        cy.intercept('GET', '**/genre/movie/list**', {
-          fixture: '/api/genres.json',
-          statusCode: 200,
-        }).as('getGenres')
+        genresIntercept()
 
         cy.findByRole('button', { name: /search/i }).click()
         cy.wait('@getGenres')
@@ -241,16 +225,10 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
 
-        cy.intercept('GET', '**/genre/movie/list**', {
-          fixture: '/api/genres.json',
-          statusCode: 200,
-        }).as('getGenres')
+        genresIntercept()
 
         cy.findByRole('button', { name: /search/i }).click()
         cy.wait('@getGenres')
@@ -278,16 +256,10 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
 
-        cy.intercept('GET', '**/genre/movie/list**', {
-          fixture: '/api/genres.json',
-          statusCode: 200,
-        }).as('getGenres')
+        genresIntercept()
 
         cy.findByRole('button', { name: /search/i }).click()
         cy.wait('@getGenres')
@@ -308,16 +280,10 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
 
-        cy.intercept('GET', '**/genre/movie/list**', {
-          fixture: '/api/genres.json',
-          statusCode: 200,
-        }).as('getGenres')
+        genresIntercept()
 
         cy.findByRole('button', { name: /search/i }).click()
         cy.wait('@getGenres')
@@ -338,19 +304,16 @@ describe('<MovieList />', () => {
     cy.fixture('/api/movies.json').then(
       ({ results: movies }: MovieResponse) => {
         movies.forEach((movie) => {
-          cy.intercept('GET', `**/search/movie?query=Movie+${movie.id}*`, {
-            body: { results: [movie] },
-            statusCode: 200,
-          })
+          movieIntercept(movie)
         })
       },
     )
 
     const errorMessage = 'Fetching genres failed!'
-    cy.intercept('GET', '**/genre/movie/list**', {
+    genresIntercept({
       statusCode: 404,
       body: { status_message: errorMessage },
-    }).as('getGenres')
+    })
 
     cy.findByRole('alert').should('not.exist')
     cy.findByRole('button', { name: /search/i }).click()
